@@ -1,0 +1,32 @@
+
+<launch>
+<node pkg="tf" type="tf_remap" name="tf_remapper" output="screen">
+  <rosparam param="mappings">
+    [{old: /base_link, new: /oldbase_link},{old: /odom, new: /old_odom},{old: /imu, new: imu},{old: /dvl, new: dvl}]
+  </rosparam>
+</node>
+
+<node pkg="rosbag" type="play" name="player" args="-l --clock /home/lucas/all_topics_graham.bag /odom:=/old_odom">
+  <remap from="tf" to="tf_old" />
+</node>
+
+ <node pkg="tf" type="static_transform_publisher" name="odom2base_link" args="0 0 0   0 0  0  1 odom base_link 100">
+    </node>
+    <node pkg="sub8_launch" type="state_message_remapper.py" name="state_message_remapper"/>
+
+  <node pkg="nodelet" type="nodelet" args="standalone odom_estimator/nodelet" name="odom_estimator" respawn="true"><rosparam>
+      have_gps: false
+      local_frame: map
+      <!-- Gainesville -->
+      start_x_ecef:   738543 
+      start_y_ecef: -5498316
+      start_z_ecef:  3136465
+      <!-- San Diego -->
+      <!-- start_x_ecef:   -2459847 
+      start_y_ecef: -4776091
+      start_z_ecef:  3426313 -->
+    </rosparam>
+    <remap from="odom" to="imu_odom"/>
+  </node>
+
+</launch>

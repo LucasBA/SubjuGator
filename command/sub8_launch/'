@@ -1,0 +1,12 @@
+
+<launch>
+<node pkg="tf" type="tf_remap" name="tf_remapper" output="screen">
+  <rosparam param="mappings">
+    [{old: /map, new: mapy},{old: /base_link, new: base_linky}]
+  </rosparam>
+</node>
+
+<node pkg="rosbag" type="play" name="player" args="--clock /home/lucas/all_topics_graham.bag">
+  <remap from="tf" to="tf_old" />
+</node>
+</launch>
