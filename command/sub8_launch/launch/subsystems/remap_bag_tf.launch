@@ -2,11 +2,11 @@
 <launch>
 <node pkg="tf" type="tf_remap" name="tf_remapper" output="screen">
   <rosparam param="mappings">
-    [{old: /base_link, new: /oldbase_link},{old: /odom, new: /old_odom},{old: /imu, new: imu},{old: /dvl, new: dvl}]
+    [{old: /base_link, new: /old_base_link},{old: /odom, new: /old_odom},{old: /imu, new: imu},{old: /dvl, new: dvl}]
   </rosparam>
 </node>
 
-<node pkg="rosbag" type="play" name="player" args="-l --clock /home/lucas/all_topics_graham.bag /odom:=/old_odom">
+<node pkg="rosbag" type="play" name="player" args="-l --clock /home/lucas/all_topics_graham.bag /odom:=/odom">
   <remap from="tf" to="tf_old" />
 </node>
 
